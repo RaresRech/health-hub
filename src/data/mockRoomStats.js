@@ -1,0 +1,25 @@
+export const mockRoomStats = {
+  dustDensity: 31.4,
+  presence: true,
+  pressure: 1014.2,
+  temperature: 22.8,
+  humidity: 46,
+  detectionDistance: 128,
+  gasPresence: false,
+  targetTemperature: 24,
+  controls: {
+    heating: false,
+    light: true,
+    neoPixelBehavior: 'Automatic',
+    neoPixelPredefinedColor: 'Blue',
+    neoPixelCustomRed: 116,
+    neoPixelCustomGreen: 241,
+    neoPixelCustomBlue: 231,
+    neoPixelCustomBrightness: 0.75,
+  },
+  meta: {
+    uiPage: 'overview',
+    encoderButton: false,
+    standby: false,
+  },
+};

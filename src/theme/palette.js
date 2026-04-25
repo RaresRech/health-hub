@@ -1,0 +1,15 @@
+export const palette = {
+  bg: '#05070B',
+  panel: '#0F1420',
+  card: '#141B29',
+  cardSoft: '#1A2233',
+  border: 'rgba(255,255,255,0.08)',
+  text: '#F7F9FC',
+  subtext: '#8E9AAF',
+  blue: '#7BC5FF',
+  cyan: '#74F1E7',
+  green: '#83F4B5',
+  amber: '#FFD37B',
+  rose: '#FF8BA6',
+  shadow: 'rgba(0,0,0,0.35)',
+};

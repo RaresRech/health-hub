@@ -1,0 +1,92 @@
+export const typography = {
+  eyebrow: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '600',
+    letterSpacing: 1.2,
+  },
+  pageTitle: {
+    fontSize: 33,
+    lineHeight: 39,
+    fontWeight: '700',
+    letterSpacing: -0.8,
+  },
+  heroLabel: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+  },
+  heroBody: {
+    fontSize: 15,
+    lineHeight: 23,
+    fontWeight: '400',
+    letterSpacing: 0.1,
+  },
+  displayLarge: {
+    fontSize: 64,
+    lineHeight: 68,
+    fontWeight: '700',
+    letterSpacing: -2,
+  },
+  displayMedium: {
+    fontSize: 42,
+    lineHeight: 46,
+    fontWeight: '700',
+    letterSpacing: -1.1,
+  },
+  metric: {
+    fontSize: 34,
+    lineHeight: 36,
+    fontWeight: '700',
+    letterSpacing: -0.8,
+  },
+  titleLarge: {
+    fontSize: 28,
+    lineHeight: 32,
+    fontWeight: '700',
+    letterSpacing: -0.6,
+  },
+  titleMedium: {
+    fontSize: 22,
+    lineHeight: 27,
+    fontWeight: '700',
+    letterSpacing: -0.3,
+  },
+  titleSmall: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: '600',
+    letterSpacing: -0.1,
+  },
+  body: {
+    fontSize: 14,
+    lineHeight: 21,
+    fontWeight: '400',
+    letterSpacing: 0.1,
+  },
+  bodySmall: {
+    fontSize: 13,
+    lineHeight: 19,
+    fontWeight: '400',
+    letterSpacing: 0.1,
+  },
+  label: {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '600',
+    letterSpacing: 0,
+  },
+  labelSmall: {
+    fontSize: 12,
+    lineHeight: 17,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  caption: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+  },
+};
