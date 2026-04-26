@@ -1,0 +1,1507 @@
+substitutions:
+
+  # =========================================================
+  # 🎨 DISPLAY COLOR PALETTE (used in display lambda)
+  # Values: 0–255 (RGB)
+  # =========================================================
+
+  # --- Background ---
+  col_bg_r: "0"
+  col_bg_g: "0"
+  col_bg_b: "0"
+
+  # --- Primary text (main numbers, labels) ---
+  col_white_r: "87"
+  col_white_g: "86"
+  col_white_b: "79"
+
+  # --- Secondary text (fallback / inactive values) ---
+  col_soft_r: "120"
+  col_soft_g: "128"
+  col_soft_b: "140"
+
+  # --- Thermostat editing highlight ---
+  col_blue_r: "217"
+  col_blue_g: "135"
+  col_blue_b: "49"
+
+  # --- Heating active color ---
+  col_orange_r: "205"
+  col_orange_g: "33"
+  col_orange_b: "42"
+
+  # --- Light ON icon ---
+  col_yellow_r: "255"
+  col_yellow_g: "255"
+  col_yellow_b: "0"
+
+  # --- Light OFF icon ---
+  col_yellow_dim_r: "87"
+  col_yellow_dim_g: "86"
+  col_yellow_dim_b: "79"
+
+  # --- Sensor page colors ---
+  col_room_temp_r: "223"
+  col_room_temp_g: "70"
+  col_room_temp_b: "1"
+
+  col_humidity_r: "0"
+  col_humidity_g: "141"
+  col_humidity_b: "185"
+
+  col_pressure_r: "109"
+  col_pressure_g: "86"
+  col_pressure_b: "152"
+
+  col_dust_r: "193"
+  col_dust_g: "149"
+  col_dust_b: "82"
+
+  col_dist_r: "64"
+  col_dist_g: "220"
+  col_dist_b: "96"
+
+  col_gas_r: "80"
+  col_gas_g: "255"
+  col_gas_b: "120"
+
+  # =========================================================
+  # 💡 NEOPIXEL RING COLORS + BRIGHTNESS
+  # =========================================================
+
+  led_boot_r: "0.00"
+  led_boot_g: "0.00"
+  led_boot_b: "0.60"
+  led_boot_brightness: "1.0"
+
+  led_state1_r: "1.00"
+  led_state1_g: "0.22"
+  led_state1_b: "0.00"
+  led_state1_brightness: "1.0"
+
+  led_state2_r: "0.00"
+  led_state2_g: "0.22"
+  led_state2_b: "0.84"
+  led_state2_brightness: "1.0"
+
+  led_state3_r: "0.59"
+  led_state3_g: "0.35"
+  led_state3_b: "0.25"
+  led_state3_brightness: "1.0"
+
+  led_state4_r: "0.82"
+  led_state4_g: "0.82"
+  led_state4_b: "0.82"
+  led_state4_brightness: "1.0"
+
+  led_state5_r: "0.87"
+  led_state5_g: "0.27"
+  led_state5_b: "0.00"
+  led_state5_brightness: "1.0"
+
+  led_state6_r: "0.00"
+  led_state6_g: "0.55"
+  led_state6_b: "0.73"
+  led_state6_brightness: "1.0"
+
+  led_state7_r: "0.43"
+  led_state7_g: "0.34"
+  led_state7_b: "0.60"
+  led_state7_brightness: "1.0"
+
+  led_state8_r: "0.76"
+  led_state8_g: "0.58"
+  led_state8_b: "0.32"
+  led_state8_brightness: "1.0"
+
+  led_state9_r: "0.53"
+  led_state9_g: "0.61"
+  led_state9_b: "0.88"
+  led_state9_brightness: "1.0"
+
+  led_state10_r: "0.25"
+  led_state10_g: "0.90"
+  led_state10_b: "0.35"
+  led_state10_brightness: "1.0"
+
+  led_state11_r: "0.20"
+  led_state11_g: "1.00"
+  led_state11_b: "0.45"
+  led_state11_brightness: "1.0"
+
+  led_settings_r: "0.50"
+  led_settings_g: "0.50"
+  led_settings_b: "0.50"
+  led_settings_brightness: "1.0"
+
+  led_clock_r: "0.82"
+  led_clock_g: "0.82"
+  led_clock_b: "0.82"
+  led_clock_brightness: "0.35"
+
+esphome:
+  name: iot
+  friendly_name: IOT
+
+  on_boot:
+    priority: 600
+    then:
+      - delay: 200ms
+      - light.turn_on:
+          id: knob_ring
+          brightness: ${led_boot_brightness}
+          red: ${led_boot_r}
+          green: ${led_boot_g}
+          blue: ${led_boot_b}
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: "WeVwxQm2O2f9MwKQ06QxflbCgvhNvI30E1Yx81YAM8U="
+
+ota:
+  - platform: esphome
+    password: "db29f2a5e024c3ce91ea02632798c40c"
+
+wifi:
+  ssid: "RS24"
+  password: "12345678"
+
+  ap:
+    ssid: "Iot Fallback Hotspot"
+    password: "it4mvxmqIsD0"
+
+mqtt:
+  id: mqtt_client
+  broker: 10.241.116.69
+  port: 1883
+  username: ""
+  password: ""
+  topic_prefix: iot
+  reboot_timeout: 0s
+  publish_nan_as_none: true
+  discover_ip: true
+  discovery: true
+
+  birth_message:
+    topic: iot/status
+    payload: online
+
+  will_message:
+    topic: iot/status
+    payload: offline
+
+  on_connect:
+    then:
+      - logger.log: "MQTT Connected"
+
+  on_disconnect:
+    then:
+      - logger.log: "MQTT Disconnected"
+
+  on_message:
+    - topic: iot/cmd/target_temp/set
+      then:
+        - lambda: |-
+            float v = atof(x.c_str());
+            if (v < 10.0f) v = 10.0f;
+            if (v > 30.0f) v = 30.0f;
+            id(target_temp) = v;
+            id(last_ui_ms) = millis();
+
+    - topic: iot/cmd/light/set
+      then:
+        - lambda: |-
+            if (x == "ON" || x == "on" || x == "1") {
+              id(light_relay).turn_on();
+            } else {
+              id(light_relay).turn_off();
+            }
+
+    - topic: iot/cmd/page/set
+      then:
+        - lambda: |-
+            int p = atoi(x.c_str());
+            if (p < 0) p = 0;
+            if (p > 9) p = 9;
+            id(ui_page) = p;
+            id(edit_mode) = 0;
+            id(gauge_to_page) = id(ui_page);
+            id(gauge_animating) = true;
+            id(gauge_anim_start) = millis();
+            id(last_ui_ms) = millis();
+
+captive_portal:
+
+web_server:
+  port: 80
+
+time:
+  - platform: homeassistant
+    id: ha_time
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+
+spi:
+  clk_pin: 18
+  mosi_pin: 23
+
+number:
+  - platform: template
+    id: led_custom_r_number
+    name: "NeoPixel Custom Red"
+    min_value: 0
+    max_value: 255
+    step: 1
+    lambda: |-
+      return id(led_custom_r);
+    set_action:
+      - lambda: |-
+          id(led_custom_r) = x;
+    update_interval: 1s
+    mode: box
+    icon: "mdi:palette"
+
+  - platform: template
+    id: led_custom_g_number
+    name: "NeoPixel Custom Green"
+    min_value: 0
+    max_value: 255
+    step: 1
+    lambda: |-
+      return id(led_custom_g);
+    set_action:
+      - lambda: |-
+          id(led_custom_g) = x;
+    update_interval: 1s
+    mode: box
+    icon: "mdi:palette"
+
+  - platform: template
+    id: led_custom_b_number
+    name: "NeoPixel Custom Blue"
+    min_value: 0
+    max_value: 255
+    step: 1
+    lambda: |-
+      return id(led_custom_b);
+    set_action:
+      - lambda: |-
+          id(led_custom_b) = x;
+    update_interval: 1s
+    mode: box
+    icon: "mdi:palette"
+
+  - platform: template
+    id: led_custom_brightness_number
+    name: "NeoPixel Custom Brightness"
+    min_value: 0.05
+    max_value: 1.0
+    step: 0.05
+    lambda: |-
+      return id(led_custom_brightness);
+    set_action:
+      - lambda: |-
+          id(led_custom_brightness) = x;
+    update_interval: 1s
+    mode: box
+    icon: "mdi:brightness-6"
+
+  - platform: template
+    id: target_temp_ha
+    name: "Target Temperature"
+    min_value: 10
+    max_value: 30
+    step: 0.5
+    lambda: |-
+      return id(target_temp);
+    set_action:
+      - lambda: |-
+          id(target_temp) = x;
+          id(last_ui_ms) = millis();
+    update_interval: 1s
+    mode: box
+    icon: "mdi:thermometer"
+
+select:
+  - platform: template
+    id: led_behavior_select
+    name: "NeoPixel Behavior"
+    optimistic: true
+    options:
+      - "Automatic"
+      - "Predefined Color"
+      - "Custom Color"
+    initial_option: "Automatic"
+    set_action:
+      - lambda: |-
+          if (x == "Automatic") id(led_behavior_mode) = 0;
+          else if (x == "Predefined Color") id(led_behavior_mode) = 1;
+          else if (x == "Custom Color") id(led_behavior_mode) = 2;
+
+  - platform: template
+    id: led_predefined_select
+    name: "NeoPixel Predefined Color"
+    optimistic: true
+    options:
+      - "Orange"
+      - "Blue"
+      - "Warm White"
+      - "Green"
+      - "Purple"
+      - "Dust Gold"
+    initial_option: "Orange"
+    set_action:
+      - lambda: |-
+          if (x == "Orange") id(led_predefined_color) = 0;
+          else if (x == "Blue") id(led_predefined_color) = 1;
+          else if (x == "Warm White") id(led_predefined_color) = 2;
+          else if (x == "Green") id(led_predefined_color) = 3;
+          else if (x == "Purple") id(led_predefined_color) = 4;
+          else if (x == "Dust Gold") id(led_predefined_color) = 5;
+
+uart:
+  id: ld2410_uart
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 115200
+
+globals:
+  - id: standby_since_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  - id: standby_active
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: gauge_animating
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: gauge_anim_start
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  - id: gauge_to_page
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  - id: target_temp
+    type: float
+    restore_value: yes
+    initial_value: '22.0'
+
+  - id: hysteresis
+    type: float
+    restore_value: yes
+    initial_value: '0.5'
+
+  # 0 thermostat
+  # 1 room temp
+  # 2 humidity
+  # 3 pressure
+  # 4 dust
+  # 5 light control
+  # 6 distance
+  # 7 gas
+  # 8 settings
+  # 9 digital clock
+  - id: ui_page
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  # 0 browsing
+  # 1 editing current page value
+  - id: edit_mode
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  # 0 off, 1 on while editing light page
+  - id: light_edit_state
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  - id: last_ui_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  - id: light_auto_off_sent
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  # 0 automatic page colors
+  # 1 predefined color
+  # 2 custom RGB color
+  - id: led_behavior_mode
+    type: int
+    restore_value: yes
+    initial_value: '0'
+
+  # 0 orange, 1 blue, 2 warm white, 3 green, 4 purple, 5 dust gold
+  - id: led_predefined_color
+    type: int
+    restore_value: yes
+    initial_value: '0'
+
+  - id: led_custom_r
+    type: float
+    restore_value: yes
+    initial_value: '80.0'
+
+  - id: led_custom_g
+    type: float
+    restore_value: yes
+    initial_value: '255.0'
+
+  - id: led_custom_b
+    type: float
+    restore_value: yes
+    initial_value: '120.0'
+
+  - id: led_custom_brightness
+    type: float
+    restore_value: yes
+    initial_value: '0.25'
+
+output:
+  - platform: gpio
+    pin:
+      number: GPIO13
+      inverted: true
+    id: gp2y_led
+
+ld2410:
+  uart_id: ld2410_uart
+
+sensor:
+  - platform: aht10
+    variant: AHT20
+    temperature:
+      id: room_temp
+      name: "Room Temperature"
+      state_topic: iot/state/room_temp
+    humidity:
+      id: room_hum
+      name: "Room Humidity"
+      state_topic: iot/state/room_humidity
+    address: 0x38
+    update_interval: 5s
+
+  - platform: bmp280_i2c
+    temperature:
+      id: bmp_temp
+      name: "Pressure Temp"
+      state_topic: iot/state/pressure_temp
+    pressure:
+      id: bmp_pressure
+      name: "Pressure"
+      state_topic: iot/state/pressure
+    address: 0x77
+    update_interval: 5s
+
+  - platform: adc
+    pin: GPIO35
+    id: gp2y_adc
+    attenuation: auto
+    update_interval: never
+    internal: true
+
+  - platform: gp2y1010au0f
+    id: dust_density
+    name: "Dust Density"
+    sensor: gp2y_adc
+    output: gp2y_led
+    update_interval: 10s
+    unit_of_measurement: "µg/m³"
+    accuracy_decimals: 1
+    state_topic: iot/state/dust
+
+  - platform: adc
+    pin: GPIO34
+    id: mq135_adc
+    name: "MQ135 Gas Voltage"
+    attenuation: 12db
+    update_interval: 5s
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    state_topic: iot/state/gas_voltage
+
+  - platform: template
+    id: mq135_gas_percent
+    name: "MQ135 Gas Level"
+    lambda: |-
+      if (!id(mq135_adc).has_state()) return NAN;
+      float v = id(mq135_adc).state;
+      float pct = (v / 3.3f) * 100.0f;
+      if (pct < 0.0f) pct = 0.0f;
+      if (pct > 100.0f) pct = 100.0f;
+      return pct;
+    update_interval: 5s
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    state_topic: iot/state/gas
+
+  - platform: template
+    id: target_temp_sensor
+    name: "Target Temperature"
+    lambda: |-
+      return id(target_temp);
+    update_interval: 1s
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    state_topic: iot/state/target_temp
+
+  - platform: template
+    id: ui_page_sensor
+    name: "UI Page"
+    lambda: |-
+      return id(ui_page);
+    update_interval: 1s
+    accuracy_decimals: 0
+    state_topic: iot/state/ui_page
+
+  - platform: rotary_encoder
+    id: encoder
+    name: "Encoder"
+    pin_a:
+      number: 33
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: 32
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    resolution: 1
+
+    on_clockwise:
+      then:
+        - lambda: |-
+            id(last_ui_ms) = millis();
+
+            const bool editing_thermostat = (id(ui_page) == 0 && id(edit_mode) == 1);
+            const bool editing_light = (id(ui_page) == 5 && id(edit_mode) == 1);
+
+            if (editing_thermostat) {
+              id(target_temp) += 0.5f;
+              if (id(target_temp) > 30.0f) id(target_temp) = 30.0f;
+            } else if (editing_light) {
+              id(light_edit_state) = 1;
+              id(light_relay).turn_on();
+            } else {
+              id(ui_page) += 1;
+              if (id(ui_page) > 9) id(ui_page) = 0;
+              id(gauge_to_page) = id(ui_page);
+              id(gauge_animating) = true;
+              id(gauge_anim_start) = millis();
+            }
+
+    on_anticlockwise:
+      then:
+        - lambda: |-
+            id(last_ui_ms) = millis();
+
+            const bool editing_thermostat = (id(ui_page) == 0 && id(edit_mode) == 1);
+            const bool editing_light = (id(ui_page) == 5 && id(edit_mode) == 1);
+
+            if (editing_thermostat) {
+              id(target_temp) -= 0.5f;
+              if (id(target_temp) < 10.0f) id(target_temp) = 10.0f;
+            } else if (editing_light) {
+              id(light_edit_state) = 0;
+              id(light_relay).turn_off();
+            } else {
+              id(ui_page) -= 1;
+              if (id(ui_page) < 0) id(ui_page) = 9;
+              id(gauge_to_page) = id(ui_page);
+              id(gauge_animating) = true;
+              id(gauge_anim_start) = millis();
+            }
+
+  - platform: ld2410
+    detection_distance:
+      id: ld2410_detection_distance
+      name: "LD2410 Detection Distance"
+      state_topic: iot/state/distance
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: "Presence Detected"
+      id: presence_ld2410
+      filters:
+        - delayed_off: 10s
+      state_topic: iot/state/presence
+
+  - platform: template
+    id: standby_active_sensor
+    name: "Standby Active"
+    lambda: |-
+      return id(standby_active);
+    state_topic: iot/state/standby
+
+  - platform: gpio
+    id: encoder_button
+    pin:
+      number: 25
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Encoder Button"
+    on_press:
+      then:
+        - lambda: |-
+            id(last_ui_ms) = millis();
+
+            if (id(ui_page) == 0) {
+              id(edit_mode) = (id(edit_mode) == 0) ? 1 : 0;
+            } else if (id(ui_page) == 5) {
+              if (id(edit_mode) == 0) {
+                id(edit_mode) = 1;
+                id(light_edit_state) = id(light_relay).state ? 1 : 0;
+              } else {
+                id(edit_mode) = 0;
+              }
+            } else {
+              id(edit_mode) = 0;
+            }
+
+switch:
+  - platform: gpio
+    pin: 14
+    id: heating_relay
+    name: "Heating Relay"
+    state_topic: iot/state/heating
+    command_topic: null
+
+  - platform: gpio
+    pin: 26
+    id: light_relay
+    name: "Light Relay"
+    state_topic: iot/state/light
+    command_topic: null
+    on_turn_on:
+      - mqtt.publish:
+          topic: smarthub/indoor/light/state
+          payload: '{"on":true}'
+          retain: true
+    on_turn_off:
+      - mqtt.publish:
+          topic: smarthub/indoor/light/state
+          payload: '{"on":false}'
+          retain: true
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: wifi_ip
+      name: "IP Address"
+      entity_category: diagnostic
+
+  - platform: ld2410
+    version:
+      name: "LD2410 Firmware"
+
+interval:
+  - interval: 16ms
+    then:
+      - lambda: |-
+          static uint32_t last_thermo = 0;
+          const uint32_t now = millis();
+
+          if (now - last_thermo > 1000) {
+            last_thermo = now;
+
+            if (id(room_temp).has_state()) {
+              const float temp = id(room_temp).state;
+              const float target = id(target_temp);
+              const float h = id(hysteresis);
+
+              if (temp < target - h) {
+                id(heating_relay).turn_on();
+              } else if (temp > target + h) {
+                id(heating_relay).turn_off();
+              }
+            }
+
+            if (id(edit_mode) != 0 && (now - id(last_ui_ms) > 8000)) {
+              id(edit_mode) = 0;
+            }
+          }
+
+          bool close_to_device = false;
+
+          if (id(presence_ld2410).state) {
+            if (id(ld2410_detection_distance).has_state()) {
+              close_to_device = (id(ld2410_detection_distance).state <= 50.0f);
+            }
+          }
+
+          if (close_to_device) {
+            id(standby_since_ms) = 0;
+            id(standby_active) = false;
+          } else {
+            if (id(standby_since_ms) == 0) {
+              id(standby_since_ms) = now;
+            } else if (now - id(standby_since_ms) >= 600000) {
+              id(standby_active) = true;
+            }
+          }
+
+          static int last_state = -1;
+          static bool last_standby = false;
+          static float current_r = ${led_state4_r};
+          static float current_g = ${led_state4_g};
+          static float current_b = ${led_state4_b};
+          static float current_brightness = ${led_state4_brightness};
+
+          int state = 0;
+
+          // 1 thermostat edit
+          // 2 light edit
+          // 3 heating active
+          // 4 thermostat idle
+          // 5 room temp page
+          // 6 humidity page
+          // 7 pressure page
+          // 8 dust page
+          // 9 light page idle
+          // 10 distance page
+          // 11 gas page
+          // 12 settings page
+          // 13 digital clock page
+
+          if (id(edit_mode) == 1 && id(ui_page) == 0) state = 1;
+          else if (id(edit_mode) == 1 && id(ui_page) == 5) state = 2;
+          else if (id(edit_mode) == 0 && id(ui_page) == 0 && id(heating_relay).state) state = 3;
+          else if (id(edit_mode) == 0 && id(ui_page) == 0) state = 4;
+          else if (id(edit_mode) == 0 && id(ui_page) == 1) state = 5;
+          else if (id(edit_mode) == 0 && id(ui_page) == 2) state = 6;
+          else if (id(edit_mode) == 0 && id(ui_page) == 3) state = 7;
+          else if (id(edit_mode) == 0 && id(ui_page) == 4) state = 8;
+          else if (id(edit_mode) == 0 && id(ui_page) == 5) state = 9;
+          else if (id(edit_mode) == 0 && id(ui_page) == 6) state = 10;
+          else if (id(edit_mode) == 0 && id(ui_page) == 7) state = 11;
+          else if (id(edit_mode) == 0 && id(ui_page) == 8) state = 12;
+          else if (id(edit_mode) == 0 && id(ui_page) == 9) state = 13;
+
+          auto set_ring = [&](float r, float g, float b, float brightness, const char *effect) {
+            auto call = id(knob_ring).turn_on();
+            call.set_effect(effect);
+            call.set_rgb(r, g, b);
+            call.set_brightness(brightness);
+            call.perform();
+          };
+
+          auto approach = [](float current, float target, float speed) -> float {
+            return current + (target - current) * speed;
+          };
+
+          float target_r = current_r;
+          float target_g = current_g;
+          float target_b = current_b;
+          float target_brightness = current_brightness;
+          const char *target_effect = "None";
+
+          switch (state) {
+            case 1: {
+              const float tmin = 10.0f;
+              const float tmax = 30.0f;
+
+              float n = (id(target_temp) - tmin) / (tmax - tmin);
+              if (n < 0.0f) n = 0.0f;
+              if (n > 1.0f) n = 1.0f;
+
+              if (n < 0.33f) {
+                float k = n / 0.33f;
+                target_r = 0.0f;
+                target_g = k;
+                target_b = 1.0f;
+              } else if (n < 0.66f) {
+                float k = (n - 0.33f) / 0.33f;
+                target_r = k;
+                target_g = 1.0f;
+                target_b = 1.0f - k;
+              } else {
+                float k = (n - 0.66f) / 0.34f;
+                target_r = 1.0f;
+                target_g = 1.0f - k;
+                target_b = 0.0f;
+              }
+
+              const float phase = now / 700.0f;
+              const float pulse = 0.5f + 0.5f * sinf(phase);
+              target_brightness = 0.4f + pulse * 0.5f;
+
+              target_effect = "None";
+              break;
+            }
+
+            case 2:
+              target_r = ${led_state2_r};
+              target_g = ${led_state2_g};
+              target_b = ${led_state2_b};
+              target_brightness = ${led_state2_brightness};
+              target_effect = "None";
+              break;
+
+            case 3:
+              target_r = ${led_state3_r};
+              target_g = ${led_state3_g};
+              target_b = ${led_state3_b};
+              target_brightness = ${led_state3_brightness};
+              target_effect = "None";
+              break;
+
+            case 4:
+              target_r = ${led_state4_r};
+              target_g = ${led_state4_g};
+              target_b = ${led_state4_b};
+              target_brightness = ${led_state4_brightness};
+              target_effect = "None";
+              break;
+
+            case 5:
+              target_r = ${led_state5_r};
+              target_g = ${led_state5_g};
+              target_b = ${led_state5_b};
+              target_brightness = ${led_state5_brightness};
+              target_effect = "None";
+              break;
+
+            case 6:
+              target_r = ${led_state6_r};
+              target_g = ${led_state6_g};
+              target_b = ${led_state6_b};
+              target_brightness = ${led_state6_brightness};
+              target_effect = "None";
+              break;
+
+            case 7:
+              target_r = ${led_state7_r};
+              target_g = ${led_state7_g};
+              target_b = ${led_state7_b};
+              target_brightness = ${led_state7_brightness};
+              target_effect = "None";
+              break;
+
+            case 8:
+              target_r = ${led_state8_r};
+              target_g = ${led_state8_g};
+              target_b = ${led_state8_b};
+              target_brightness = ${led_state8_brightness};
+              target_effect = "None";
+              break;
+
+            case 9:
+              target_r = ${led_state9_r};
+              target_g = ${led_state9_g};
+              target_b = ${led_state9_b};
+              target_brightness = ${led_state9_brightness};
+              target_effect = "None";
+              break;
+
+            case 10:
+              target_r = ${led_state10_r};
+              target_g = ${led_state10_g};
+              target_b = ${led_state10_b};
+              target_brightness = ${led_state10_brightness};
+              target_effect = "None";
+              break;
+
+            case 11:
+              target_r = ${led_state11_r};
+              target_g = ${led_state11_g};
+              target_b = ${led_state11_b};
+              target_brightness = ${led_state11_brightness};
+              target_effect = "None";
+              break;
+
+            case 12:
+              target_r = ${led_settings_r};
+              target_g = ${led_settings_g};
+              target_b = ${led_settings_b};
+              target_brightness = ${led_settings_brightness};
+              target_effect = "None";
+              break;
+
+            case 13:
+              target_r = ${led_clock_r};
+              target_g = ${led_clock_g};
+              target_b = ${led_clock_b};
+              target_brightness = ${led_clock_brightness};
+              target_effect = "None";
+              break;
+          }
+
+          if (id(led_behavior_mode) == 1) {
+            switch (id(led_predefined_color)) {
+              case 0:
+                target_r = 1.00f; target_g = 0.22f; target_b = 0.00f;
+                break;
+              case 1:
+                target_r = 0.00f; target_g = 0.22f; target_b = 0.84f;
+                break;
+              case 2:
+                target_r = 0.82f; target_g = 0.82f; target_b = 0.82f;
+                break;
+              case 3:
+                target_r = 0.25f; target_g = 0.90f; target_b = 0.35f;
+                break;
+              case 4:
+                target_r = 0.43f; target_g = 0.34f; target_b = 0.60f;
+                break;
+              case 5:
+                target_r = 0.76f; target_g = 0.58f; target_b = 0.32f;
+                break;
+            }
+            target_brightness = 0.25f;
+          } else if (id(led_behavior_mode) == 2) {
+            target_r = id(led_custom_r) / 255.0f;
+            target_g = id(led_custom_g) / 255.0f;
+            target_b = id(led_custom_b) / 255.0f;
+            target_brightness = id(led_custom_brightness);
+          }
+
+          if (id(standby_active)) {
+            target_brightness *= 0.18f;
+          }
+
+          const bool state_changed = (state != last_state);
+          const bool standby_changed = (id(standby_active) != last_standby);
+
+          if (state == 1) {
+            current_r = approach(current_r, target_r, 0.10f);
+            current_g = approach(current_g, target_g, 0.10f);
+            current_b = approach(current_b, target_b, 0.10f);
+            current_brightness = approach(current_brightness, target_brightness, 0.12f);
+          } else {
+            current_r = target_r;
+            current_g = target_g;
+            current_b = target_b;
+            current_brightness = target_brightness;
+          }
+
+          const bool always_refresh = (state == 1 || id(led_behavior_mode) != 0);
+
+          if (state_changed || standby_changed || always_refresh) {
+            last_state = state;
+            last_standby = id(standby_active);
+            set_ring(current_r, current_g, current_b, current_brightness, target_effect);
+          }
+
+          static uint32_t no_presence_since = 0;
+
+          if (id(presence_ld2410).state) {
+            no_presence_since = 0;
+            id(light_auto_off_sent) = false;
+          } else {
+            if (no_presence_since == 0) {
+              no_presence_since = now;
+            } else if ((now - no_presence_since) >= 120000 && !id(light_auto_off_sent)) {
+              if (id(light_relay).state) {
+                id(light_relay).turn_off();
+              }
+              id(light_auto_off_sent) = true;
+            }
+          }
+
+  - interval: 5s
+    then:
+      - lambda: |-
+          // ── Environment ──────────────────────────────────────────────────
+          if (id(room_temp).has_state() && id(room_hum).has_state()) {
+            char buf[96];
+            snprintf(buf, sizeof(buf),
+              "{\"temp\":%.1f,\"hum\":%.0f,\"pres\":%.1f}",
+              id(room_temp).state,
+              id(room_hum).state,
+              id(bmp_pressure).has_state() ? id(bmp_pressure).state : 0.0f
+            );
+            id(mqtt_client).publish("smarthub/indoor/environment", buf);
+          }
+
+          // ── Dust ─────────────────────────────────────────────────────────
+          if (id(dust_density).has_state()) {
+            char buf[48];
+            float pm25 = id(dust_density).state;
+            float pm10 = pm25 * 1.6f;
+            snprintf(buf, sizeof(buf), "{\"pm25\":%.1f,\"pm10\":%.1f}", pm25, pm10);
+            id(mqtt_client).publish("smarthub/indoor/dust", buf);
+          }
+
+          // ── Gas / MQ135 ─────────────────────────────────────────────────
+          if (id(mq135_adc).has_state() && id(mq135_gas_percent).has_state()) {
+            char buf[64];
+            snprintf(buf, sizeof(buf),
+              "{\"voltage\":%.2f,\"level\":%.0f}",
+              id(mq135_adc).state,
+              id(mq135_gas_percent).state
+            );
+            id(mqtt_client).publish("smarthub/indoor/gas", buf);
+          }
+
+          // ── Presence ─────────────────────────────────────────────────────
+          {
+            bool present = id(presence_ld2410).state;
+            char buf[48];
+            snprintf(buf, sizeof(buf),
+              "{\"within_range\":%s,\"movement\":%s}",
+              present ? "true" : "false",
+              present ? "true" : "false"
+            );
+            id(mqtt_client).publish("smarthub/indoor/presence", buf);
+          }
+
+          // ── Light relay state ─────────────────────────────────────────────
+          {
+            char buf[16];
+            snprintf(buf, sizeof(buf), "{\"on\":%s}", id(light_relay).state ? "true" : "false");
+            id(mqtt_client).publish("smarthub/indoor/light/state", buf, true);
+          }
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: knob_ring
+    name: "NeoPixel Ring"
+    pin: 4
+    num_leds: 16
+    rgb_order: GRB
+    chipset: ws2812
+    restore_mode: ALWAYS_ON
+    default_transition_length: 0ms
+
+    effects:
+      - pulse:
+          name: "Thermostat Heat Pulse"
+          transition_length: 1400ms
+          update_interval: 30ms
+          min_brightness: 18%
+          max_brightness: 30%
+
+image:
+  - file: "mdi:home-thermometer-outline"
+    id: icon_thermostat
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:thermometer"
+    id: icon_room_temp
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:water-percent"
+    id: icon_humidity
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:gauge"
+    id: icon_pressure
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:blur"
+    id: icon_dust
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:lightbulb-off-outline"
+    id: icon_light_off_big
+    resize: 80x80
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:lightbulb-on-outline"
+    id: icon_light_on_big
+    resize: 80x80
+    type: BINARY
+    transparency: chroma_key
+
+  - file: "mdi:molecule"
+    id: icon_gas
+    resize: 50x50
+    type: BINARY
+    transparency: chroma_key
+
+  # Put your Snoopy image file beside this YAML or inside /config/esphome/.
+  # Example filename: snoopy_clock.png
+  - file: "iot/snoopy_clock.png"
+    id: snoopy_clock_bg
+    resize: 240x240
+    type: RGB565
+
+# Optional animated background.
+# To use this instead of the PNG, place snoopy_clock.gif beside this YAML,
+# uncomment this block, then uncomment the animation lines inside page 9.
+# animation:
+#   - file: "snoopy_clock.gif"
+#     id: snoopy_clock_anim
+#     resize: 240x240
+#     type: RGB565
+
+display:
+  - platform: mipi_spi
+    model: gc9a01a
+    id: my_display
+    cs_pin: 5
+    dc_pin: 16
+    reset_pin: 17
+    invert_colors: true
+    rotation: 0
+    update_interval: 33ms
+
+    lambda: |-
+      const int cx = 120;
+      const int cy = 120;
+      const int icon_y = 25;
+
+      const float temp     = id(room_temp).has_state() ? id(room_temp).state : NAN;
+      const float hum      = id(room_hum).has_state() ? id(room_hum).state : NAN;
+      const float pressure = id(bmp_pressure).has_state() ? id(bmp_pressure).state : NAN;
+      const float dust     = id(dust_density).has_state() ? id(dust_density).state : NAN;
+      const float distance = id(ld2410_detection_distance).has_state() ? id(ld2410_detection_distance).state : NAN;
+      const float gas      = id(mq135_gas_percent).has_state() ? id(mq135_gas_percent).state : NAN;
+      const char *ip_text  = id(wifi_ip).has_state() ? id(wifi_ip).state.c_str() : "No IP";
+
+      char clock_text[16] = "--:--";
+      char date_text[24] = "";
+      auto now_time = id(ha_time).now();
+      if (now_time.is_valid()) {
+        now_time.strftime(clock_text, sizeof(clock_text), "%H:%M");
+        now_time.strftime(date_text, sizeof(date_text), "%a %d %b");
+      }
+
+      const float target = id(target_temp);
+      const bool heating = id(heating_relay).state;
+      const int page     = id(ui_page);
+      const int edit     = id(edit_mode);
+
+      const Color BG(${col_bg_r}, ${col_bg_g}, ${col_bg_b});
+      const Color WHITE(${col_white_r}, ${col_white_g}, ${col_white_b});
+      const Color SOFT(${col_soft_r}, ${col_soft_g}, ${col_soft_b});
+      const Color BLUE(${col_blue_r}, ${col_blue_g}, ${col_blue_b});
+      const Color ORANGE(${col_orange_r}, ${col_orange_g}, ${col_orange_b});
+      const Color YELLOW(${col_yellow_r}, ${col_yellow_g}, ${col_yellow_b});
+      const Color YELLOW_DIM(${col_yellow_dim_r}, ${col_yellow_dim_g}, ${col_yellow_dim_b});
+
+      const Color ROOM_TEMP_COLOR(${col_room_temp_r}, ${col_room_temp_g}, ${col_room_temp_b});
+      const Color HUMIDITY_COLOR(${col_humidity_r}, ${col_humidity_g}, ${col_humidity_b});
+      const Color PRESSURE_COLOR(${col_pressure_r}, ${col_pressure_g}, ${col_pressure_b});
+      const Color DUST_COLOR(${col_dust_r}, ${col_dust_g}, ${col_dust_b});
+      const Color DISTANCE_COLOR(${col_dist_r}, ${col_dist_g}, ${col_dist_b});
+      const Color GAS_COLOR(${col_gas_r}, ${col_gas_g}, ${col_gas_b});
+
+      auto clamp01 = [&](float x) -> float {
+        if (x < 0.0f) return 0.0f;
+        if (x > 1.0f) return 1.0f;
+        return x;
+      };
+
+      auto draw_ring = [&](float value, float vmin, float vmax, int radius, int thickness, Color ring_color, float progress) {
+        if (value < vmin) value = vmin;
+        if (value > vmax) value = vmax;
+        if (progress < 0.0f) progress = 0.0f;
+        if (progress > 1.0f) progress = 1.0f;
+
+        const float norm = clamp01((value - vmin) / (vmax - vmin));
+        const float eased = 1.0f - powf(1.0f - progress, 3.0f);
+        const float visible = clamp01(norm * eased);
+
+        const int steps = 1200;
+        int active_steps = (int) floorf(visible * steps);
+        if (active_steps < 0) active_steps = 0;
+        if (active_steps > steps) active_steps = steps;
+
+        const float start_angle = 3.1415926f;
+        const float sweep = 2.0f * 3.1415926f;
+
+        for (int s = 0; s < active_steps; s++) {
+          const float a = start_angle + (sweep * s / steps);
+          const float ca = cosf(a);
+          const float sa = sinf(a);
+
+          const int x_outer = cx + (int) roundf(ca * radius);
+          const int y_outer = cy + (int) roundf(sa * radius);
+          const int x_inner = cx + (int) roundf(ca * (radius - thickness + 1));
+          const int y_inner = cy + (int) roundf(sa * (radius - thickness + 1));
+
+          it.line(x_inner, y_inner, x_outer, y_outer, ring_color);
+        }
+      };
+
+      const uint32_t now = millis();
+      const uint32_t anim_delay = 220;
+      const float full_arc_duration = 800.0f;
+      const float min_arc_duration = 220.0f;
+
+      auto page_arc_fraction = [&](int sensor_page) -> float {
+        switch (sensor_page) {
+          case 1:
+            if (!isnan(temp)) return clamp01((temp - 10.0f) / (35.0f - 10.0f));
+            break;
+          case 2:
+            if (!isnan(hum)) return clamp01(hum / 100.0f);
+            break;
+          case 3:
+            if (!isnan(pressure)) return clamp01((pressure - 900.0f) / (1050.0f - 900.0f));
+            break;
+          case 4:
+            if (!isnan(dust)) return clamp01(dust / 150.0f);
+            break;
+          case 6:
+            if (!isnan(distance)) return clamp01(distance / 200.0f);
+            break;
+          case 7:
+            if (!isnan(gas)) return clamp01(gas / 100.0f);
+            break;
+        }
+        return 1.0f;
+      };
+
+      float sweep_t = 1.0f;
+      if (id(gauge_animating)) {
+        const uint32_t elapsed = now - id(gauge_anim_start);
+        const float arc_fraction = page_arc_fraction(id(gauge_to_page));
+
+        float anim_duration = full_arc_duration * arc_fraction;
+        if (anim_duration < min_arc_duration) anim_duration = min_arc_duration;
+
+        if (elapsed < anim_delay) {
+          sweep_t = 0.0f;
+        } else {
+          sweep_t = float(elapsed - anim_delay) / anim_duration;
+          if (sweep_t >= 1.0f) {
+            sweep_t = 1.0f;
+            id(gauge_animating) = false;
+          }
+        }
+      }
+
+      auto page_progress = [&](int sensor_page) -> float {
+        if (id(gauge_animating) && id(gauge_to_page) == sensor_page) {
+          return sweep_t;
+        }
+        return 1.0f;
+      };
+
+      it.fill(BG);
+
+      auto temp_to_color = [&](float t) -> Color {
+        const float tmin = 10.0f;
+        const float tmax = 30.0f;
+
+        float n = (t - tmin) / (tmax - tmin);
+        if (n < 0.0f) n = 0.0f;
+        if (n > 1.0f) n = 1.0f;
+
+        float r = (n < 0.5f) ? (2.0f * n) : 1.0f;
+        float g = (n < 0.5f) ? (1.0f) : (1.0f - 2.0f * (n - 0.5f));
+        float b = (n < 0.5f) ? (1.0f - 2.0f * n) : 0.0f;
+
+        return Color(
+          (uint8_t)(r * 255),
+          (uint8_t)(g * 255),
+          (uint8_t)(b * 255)
+        );
+      };
+
+      if (page == 0) {
+        const float v = target;
+        const float vmin = 10.0f;
+        const float vmax = 30.0f;
+
+        const Color gradient_color = temp_to_color(target);
+        const Color ring_color = edit ? gradient_color : (heating ? ORANGE : WHITE);
+        const Color center_temp_color = edit ? gradient_color : (heating ? ORANGE : WHITE);
+
+        it.image(cx - 25, icon_y, id(icon_thermostat), ring_color, COLOR_OFF);
+
+        const float norm = clamp01((v - vmin) / (vmax - vmin));
+        const float angle = norm * 2.0f * 3.1415926f;
+
+        const int dot_radius = 115;
+        const int dot_x = cx + (int) roundf(cosf(angle) * dot_radius);
+        const int dot_y = cy + (int) roundf(sinf(angle) * dot_radius);
+
+        it.filled_circle(dot_x, dot_y, 5, ring_color);
+
+        if (!isnan(temp)) {
+          it.printf(cx, cy, id(font_big), center_temp_color, TextAlign::CENTER, "%.1f °C", temp);
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "--.- °C");
+        }
+
+        it.printf(cx, 175, id(font_medium),
+                  edit ? BLUE : WHITE,
+                  TextAlign::CENTER,
+                  "Set: %.1f°C", target);
+
+        it.printf(cx, 213, id(font_small),
+                  heating ? ORANGE : WHITE,
+                  TextAlign::CENTER,
+                  heating ? "Heating" : "Standby");
+
+      } else if (page == 1) {
+        it.image(cx - 25, icon_y, id(icon_room_temp), ROOM_TEMP_COLOR, COLOR_OFF);
+
+        if (!isnan(temp)) {
+          draw_ring(temp, 10.0f, 35.0f, 118, 6, ROOM_TEMP_COLOR, page_progress(1));
+          it.printf(cx, cy, id(font_big), ROOM_TEMP_COLOR, TextAlign::CENTER, "%.1f °C", temp);
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "--.- °C");
+        }
+
+      } else if (page == 2) {
+        it.image(cx - 25, icon_y, id(icon_humidity), HUMIDITY_COLOR, COLOR_OFF);
+
+        if (!isnan(hum)) {
+          draw_ring(hum, 0.0f, 100.0f, 118, 6, HUMIDITY_COLOR, page_progress(2));
+          it.printf(cx, cy, id(font_big), HUMIDITY_COLOR, TextAlign::CENTER, "%.0f %%", hum);
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "-- %%");
+        }
+
+      } else if (page == 3) {
+        it.image(cx - 25, icon_y, id(icon_pressure), PRESSURE_COLOR, COLOR_OFF);
+
+        if (!isnan(pressure)) {
+          draw_ring(pressure, 900.0f, 1050.0f, 118, 6, PRESSURE_COLOR, page_progress(3));
+          it.printf(cx, cy, id(font_big), PRESSURE_COLOR, TextAlign::CENTER, "%.0f hPa", pressure);
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "-- hPa");
+        }
+
+      } else if (page == 4) {
+        it.image(cx - 25, icon_y, id(icon_dust), DUST_COLOR, COLOR_OFF);
+
+        if (!isnan(dust)) {
+          draw_ring(dust, 0.0f, 150.0f, 118, 6, DUST_COLOR, page_progress(4));
+          it.printf(cx, cy, id(font_big), DUST_COLOR, TextAlign::CENTER, "%.0f ug/m3", dust);
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "-- ug/m3");
+        }
+
+      } else if (page == 5) {
+        const bool light_is_on = id(light_relay).state;
+        const bool preview_on = (edit == 1) ? (id(light_edit_state) == 1) : light_is_on;
+
+        if (preview_on) {
+          it.image(cx - 40, cy - 40, id(icon_light_on_big), YELLOW, COLOR_OFF);
+        } else {
+          it.image(cx - 40, cy - 40, id(icon_light_off_big), YELLOW_DIM, COLOR_OFF);
+        }
+
+        it.printf(cx, 198, id(font_medium),
+                  edit ? YELLOW : (preview_on ? YELLOW : YELLOW_DIM),
+                  TextAlign::CENTER,
+                  preview_on ? "Light On" : "Light Off");
+
+      } else if (page == 6) {
+        if (!isnan(distance)) {
+          draw_ring(distance, 0.0f, 200.0f, 118, 6, DISTANCE_COLOR, page_progress(6));
+          it.printf(cx, 78, id(font_medium), DISTANCE_COLOR, TextAlign::CENTER, "Distance");
+          it.printf(cx, cy, id(font_big), DISTANCE_COLOR, TextAlign::CENTER, "%.0f cm", distance);
+        } else {
+          it.printf(cx, 78, id(font_medium), DISTANCE_COLOR, TextAlign::CENTER, "Distance");
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "-- cm");
+        }
+
+      } else if (page == 7) {
+        it.image(cx - 25, icon_y, id(icon_gas), GAS_COLOR, COLOR_OFF);
+
+        if (!isnan(gas)) {
+          draw_ring(gas, 0.0f, 100.0f, 118, 6, GAS_COLOR, page_progress(7));
+          it.printf(cx, cy, id(font_big), GAS_COLOR, TextAlign::CENTER, "%.0f %%", gas);
+          it.printf(cx, 198, id(font_medium), GAS_COLOR, TextAlign::CENTER, "Gas Level");
+        } else {
+          it.printf(cx, cy, id(font_big), SOFT, TextAlign::CENTER, "-- %%");
+          it.printf(cx, 198, id(font_medium), GAS_COLOR, TextAlign::CENTER, "Gas Level");
+        }
+
+      } else if (page == 8) {
+        const char *mode_text = "Auto";
+        if (id(led_behavior_mode) == 1) mode_text = "Preset";
+        else if (id(led_behavior_mode) == 2) mode_text = "Custom";
+
+        const char *preset_text = "Orange";
+        switch (id(led_predefined_color)) {
+          case 0: preset_text = "Orange"; break;
+          case 1: preset_text = "Blue"; break;
+          case 2: preset_text = "Warm White"; break;
+          case 3: preset_text = "Green"; break;
+          case 4: preset_text = "Purple"; break;
+          case 5: preset_text = "Dust Gold"; break;
+        }
+
+        it.printf(cx, 45, id(font_medium), WHITE, TextAlign::CENTER, "Settings");
+        it.printf(cx, 82, id(font_small), SOFT, TextAlign::CENTER, "IP Address");
+        it.printf(cx, 104, id(font_medium), WHITE, TextAlign::CENTER, "%s", ip_text);
+        it.printf(cx, 142, id(font_small), SOFT, TextAlign::CENTER, "NeoPixel Mode");
+        it.printf(cx, 164, id(font_medium), GAS_COLOR, TextAlign::CENTER, "%s", mode_text);
+
+        if (id(led_behavior_mode) == 1) {
+          it.printf(cx, 196, id(font_small), SOFT, TextAlign::CENTER, "Preset: %s", preset_text);
+        } else if (id(led_behavior_mode) == 2) {
+          it.printf(cx, 196, id(font_small), SOFT, TextAlign::CENTER, "RGB %.0f %.0f %.0f", id(led_custom_r), id(led_custom_g), id(led_custom_b));
+        } else {
+          it.printf(cx, 196, id(font_small), SOFT, TextAlign::CENTER, "Page-based colors");
+        }
+
+      } else if (page == 9) {
+        // Digital clock face with Snoopy background.
+        // Place snoopy_clock.png in the same ESPHome folder as this YAML.
+        it.image(0, 0, id(snoopy_clock_bg));
+
+        // Animated GIF option:
+        // id(snoopy_clock_anim).next_frame();
+        // it.image(0, 0, id(snoopy_clock_anim));
+
+        // Center panel for readable time over image.
+        it.filled_circle(cx, cy, 76, BG);
+        it.circle(cx, cy, 78, WHITE);
+        it.circle(cx, cy, 79, SOFT);
+
+        it.printf(cx, 92, id(font_big), WHITE, TextAlign::CENTER, "%s", clock_text);
+        it.printf(cx, 140, id(font_medium), SOFT, TextAlign::CENTER, "%s", date_text);
+        it.printf(cx, 181, id(font_small), SOFT, TextAlign::CENTER, "Snoopy Clock");
+      }
+
+font:
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 14
+
+  - file: "gfonts://Roboto@500"
+    id: font_medium
+    size: 18
+
+  - file: "gfonts://Roboto@700"
+    id: font_big
+    size: 48

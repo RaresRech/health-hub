@@ -5,8 +5,8 @@ export const footerTabs = [
 ];
 
 export const initialBrokerConfig = {
-  url: 'ws://192.168.1.217:9001',
-  hostIp: '192.168.1.217',
+  url: 'ws://10.241.116.69:9001',
+  hostIp: '10.241.116.69',
   port: '9001',
   username: '',
   password: '',
